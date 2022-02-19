@@ -1,22 +1,16 @@
 defmodule OtodomSpider do
   use Crawly.Spider
-  alias Crawly.Utils
 
   @impl Crawly.Spider
   def base_url(), do: "https://www.otodom.pl"
 
   @impl Crawly.Spider
-  def init(), do: [start_urls: ["https://www.otodom.pl/pl/oferty/sprzedaz/mieszkanie/katowice"]]
+  def init(), do: [start_urls: [page_url(1)]]
 
   @impl Crawly.Spider
   def parse_item(response) do
+    IO.puts("Scraping page #{response.request.url}")
     {:ok, document} = Floki.parse_document(response.body)
-
-    hrefs = []
-
-    requests =
-      Utils.build_absolute_urls(hrefs, base_url())
-      |> Utils.requests_from_urls()
 
     adverts =
       document
@@ -28,6 +22,11 @@ defmodule OtodomSpider do
       |> Stream.filter(&filter_errors/1)
       |> Enum.map(fn {_, result} -> result end)
       |> IO.inspect()
+
+    requests =
+      next_requests(document, response.request.url)
+      |> IO.inspect
+      |> Enum.map(&Crawly.Utils.request_from_url/1)
 
     %{
       :requests => requests,
@@ -68,6 +67,46 @@ defmodule OtodomSpider do
 
   defp only_numbers(text) do
     Regex.replace(~r/[^0-9.]/, text, "")
+  end
+
+  defp next_requests(document, url) do
+    unless page_exceeded?(document) do
+      next_requests(url)
+    else
+      []
+    end
+  end
+  
+  defp page_exceeded?(document) do
+    document
+    |> Floki.find("h3.css-1b2au34")
+    |> Floki.text()
+    |> String.contains?("Nie znaleziono")
+  end
+
+  defp next_requests(url) do
+    case next_page(url) do
+      {:ok, page} -> [page]
+      {:error, _} -> []
+    end
+  end
+
+  defp next_page(url) do
+    rescue_errors(fn ->
+      page_no = page(url)
+      page_url(page_no + 1)
+    end)
+  end
+
+  defp page(url) do
+    Regex.run(~r/.*page=(\d+)/, url)
+    |> Enum.at(1)
+    |> Integer.parse()
+    |> elem(0)
+  end
+
+  defp page_url(page_no) do
+    ~s(https://www.otodom.pl/pl/oferty/sprzedaz/mieszkanie/katowice?page=#{page_no})
   end
 
   defp rescue_errors(operation) do
