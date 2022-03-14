@@ -1,5 +1,6 @@
 defmodule OtodomSpider do
   use Crawly.Spider
+  import Scraper.Selectors
 
   @impl Crawly.Spider
   def base_url(), do: "https://www.otodom.pl"
@@ -37,11 +38,11 @@ defmodule OtodomSpider do
   defp read_item(advert) do
     rescue_errors(fn ->
       %{
-        title: Floki.find(advert, "h3.css-1fc77cf") |> Floki.text(),
-        price: Floki.find(advert, "p.css-1bq5zfe") |> Floki.text() |> read_price(),
-        address: Floki.find(advert, "span.css-17o293g") |> Floki.text(),
-        size: Floki.find(advert, "p.css-6o5l1c") |> Floki.text() |> read_size(),
-        link: Floki.find(advert, "a.css-jf4j3r") |> Floki.attribute("href") |> Enum.at(0)
+        title: Floki.find(advert, selector_of(:title)) |> Floki.text(),
+        price: Floki.find(advert, selector_of(:price)) |> Floki.text() |> read_price(),
+        address: Floki.find(advert, selector_of(:address)) |> Floki.text(),
+        size: Floki.find(advert, selector_of(:size)) |> Floki.text() |> read_size(),
+        link: Floki.find(advert, selector_of(:link)) |> Floki.attribute("href") |> Enum.at(0)
       }
     end)
   end
