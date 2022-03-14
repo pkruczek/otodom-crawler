@@ -1,4 +1,4 @@
-use Mix.Config
+import Config
 
 config :scraper,
   closespider_timeout: 10,
@@ -10,7 +10,7 @@ config :scraper,
   ],
   pipelines: [
     {Crawly.Pipelines.Validate, fields: [:url, :title]},
-    {Crawly.Pipelines.DuplicatesFilter, item_id: :title},
-    Crawly.Pipelines.JSONEncoder,
-    {Crawly.Pipelines.WriteToFile, extension: "jl", folder: "/tmp"}
-  ]
+    {Scraper.EctoPipeline, fields: [:url, :title]},
+ ]
+
+import_config "#{Mix.env()}.exs"

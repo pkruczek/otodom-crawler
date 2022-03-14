@@ -25,7 +25,7 @@ defmodule OtodomSpider do
 
     requests =
       next_requests(document, response.request.url)
-      |> IO.inspect
+      |> IO.inspect()
       |> Enum.map(&Crawly.Utils.request_from_url/1)
 
     %{
@@ -76,7 +76,7 @@ defmodule OtodomSpider do
       []
     end
   end
-  
+
   defp page_exceeded?(document) do
     document
     |> Floki.find("h3.css-1b2au34")

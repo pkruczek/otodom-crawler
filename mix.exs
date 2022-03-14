@@ -21,7 +21,9 @@ defmodule Scraper.MixProject do
   defp deps do
     [
       {:crawly, "~> 0.13.0"},
-      {:floki, "~> 0.26.0"}
+      {:floki, "~> 0.26.0"},
+      {:ecto_sql, "~> 3.7"},
+      {:postgrex, "~> 0.16.2"}
     ]
   end
 end
