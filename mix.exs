@@ -23,7 +23,8 @@ defmodule Scraper.MixProject do
       {:crawly, "~> 0.13.0"},
       {:floki, "~> 0.26.0"},
       {:ecto_sql, "~> 3.7"},
-      {:postgrex, "~> 0.16.2"}
+      {:postgrex, "~> 0.16.2"},
+      {:jason, "~> 1.3"}
     ]
   end
 end

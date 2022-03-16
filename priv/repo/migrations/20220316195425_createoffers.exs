@@ -6,8 +6,7 @@ defmodule Data.Offers.Repo.Migrations.Createoffers do
       add(:title, :string)
       add(:price, :integer)
       add(:address, :string)
-      # TODO: Ecto.Type and jsonb
-      add(:size, :string)
+      add(:size, :map)
       add(:link, :string)
     end
   end

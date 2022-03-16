@@ -5,8 +5,7 @@ defmodule Data.Offer do
     field(:title, :string)
     field(:price, :integer)
     field(:address, :string)
-    # TODO: Ecto.Type and jsonb
-    field(:size, :string)
+    field(:size, Data.Offer.EctoSize)
     field(:link, :string)
   end
 

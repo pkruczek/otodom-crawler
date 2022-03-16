@@ -10,7 +10,7 @@ config :scraper,
   ],
   pipelines: [
     {Crawly.Pipelines.Validate, fields: [:url, :title]},
-    {Scraper.EctoPipeline, fields: [:url, :title]},
- ]
+    {Scraper.EctoPipeline, fields: [:url, :title]}
+  ]
 
 import_config "#{Mix.env()}.exs"
