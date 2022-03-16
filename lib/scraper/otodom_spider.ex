@@ -15,7 +15,7 @@ defmodule OtodomSpider do
 
     adverts =
       document
-      |> Floki.find("a.css-jf4j3r")
+      |> Floki.find(selector_of(:offers))
 
     items =
       adverts
@@ -80,7 +80,7 @@ defmodule OtodomSpider do
 
   defp page_exceeded?(document) do
     document
-    |> Floki.find("h3.css-1b2au34")
+    |> Floki.find(selector_of(:page_not_found))
     |> Floki.text()
     |> String.contains?("Nie znaleziono")
   end

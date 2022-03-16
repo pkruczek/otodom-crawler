@@ -1,15 +1,17 @@
 defmodule Scraper.Selectors do
   @default_selectors %{
-    title: "h3.css-1fc77cf",
+    offers: "a.css-1c4ocg7",
+    title: "h3.css-1rhznz4",
     price: "p.css-1bq5zfe",
     address: "span.css-17o293g",
-    size: "p.css-6o5l1c",
-    link: "a.css-jf4j3r"
+    size: "p.css-zng9ao",
+    link: "a.css-1c4ocg7",
+    page_not_found: "h3.css-1b2au34",
   }
 
   def selector_of(selector) do
     selector_map()
-    |> Map.fetch_env!(selector)
+    |> Map.fetch!(selector)
   end
 
   defp selector_map do
